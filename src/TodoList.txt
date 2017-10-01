@@ -1,4 +1,4 @@
 buy Milk
 walk the dog
-wash the car
+wash the car|
 Walk the fish

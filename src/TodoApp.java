@@ -18,9 +18,9 @@ public void start(String[] args) throws IOException {
         todoApp.printUsage();
     } else if (args[0].equals("-l")) {
         todoApp.listTasks();
-    } /*else if (args[0].equals("-c")) {
-            TodoApp.markComplete();
-        }*/ else if (args.length > 1 && args[0].equals("-r")) {
+    } else if (args[0].equals("-c")) {
+            TodoApp.markComplete(args);
+        } else if (args.length > 1 && args[0].equals("-c")) {
         todoApp.removeTasks(args);
     } else if (args[0].length() > 1 && args[0].equals("-a")) {
         todoApp.addNewTask(args);
@@ -51,7 +51,7 @@ public void start(String[] args) throws IOException {
                 System.out.println("No todos for today! :)");
             } else {
                 for (int i = 0; i < lines.size(); i++) {
-                    System.out.println(i + 1 + ". " + lines.get(i));
+                    System.out.println(i + 1 + ". - [ ] " + lines.get(i));
                 }
             }
         } catch (Exception e) {
@@ -94,6 +94,23 @@ public void start(String[] args) throws IOException {
             Files.write(myPath, lines);
         } catch (Exception e) {
             System.out.println("Unable to read file: Todolist.txt");
+        }
+    }
+
+//  CHECK TASK
+
+    public static void markComplete(String[] aargs) {
+        Path myPath = Paths.get("TodoList.txt");
+        int lineToCheck = Integer.parseInt(aargs[1]) - 1;
+        try {
+        List<String> lines = Files.readAllLines(myPath);
+        if (lines.get(lineToCheck).endsWith("|")) {                     //Prevents to check something twice
+            System.out.println("Task is already marked as completed!");
+        } else
+        lines.set(lineToCheck, lines.get(lineToCheck) + "|");
+        Files.write(myPath, lines);
+        } catch (IOException e) {
+            System.out.println("Unable to read TodoList.txt");;
         }
     }
 
