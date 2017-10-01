@@ -20,7 +20,7 @@ public void start(String[] args) throws IOException {
         todoApp.listTasks();
     } else if (args[0].equals("-c")) {
             TodoApp.markComplete(args);
-        } else if (args.length > 1 && args[0].equals("-c")) {
+    } else if (args.length > 1 && args[0].equals("-r")) {
         todoApp.removeTasks(args);
     } else if (args[0].length() > 1 && args[0].equals("-a")) {
         todoApp.addNewTask(args);
@@ -47,11 +47,15 @@ public void start(String[] args) throws IOException {
         try {
             Path myPath = Paths.get("TodoList.txt");
             List<String> lines = Files.readAllLines(myPath);
+            StringBuffer sb = new StringBuffer();
+
             if (lines.isEmpty()) {
                 System.out.println("No todos for today! :)");
             } else {
                 for (int i = 0; i < lines.size(); i++) {
-                    System.out.println(i + 1 + ". - [ ] " + lines.get(i));
+                    if (lines.get(i).endsWith("|")) {
+                        System.out.println(i + 1 + ". - [X] " + lines.get(i).substring(0, lines.get(i).length() - 1));
+                    } else System.out.println(i + 1 + ". - [ ] " + lines.get(i));
                 }
             }
         } catch (Exception e) {
@@ -105,7 +109,7 @@ public void start(String[] args) throws IOException {
         try {
         List<String> lines = Files.readAllLines(myPath);
         if (lines.get(lineToCheck).endsWith("|")) {                     //Prevents to check something twice
-            System.out.println("Task is already marked as completed!");
+            System.out.println("Task is already marked as completed!\nHave you done it again?");
         } else
         lines.set(lineToCheck, lines.get(lineToCheck) + "|");
         Files.write(myPath, lines);
